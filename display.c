@@ -8,7 +8,7 @@ int printMap(char *filename)
     if (fp == NULL)
     {
         printf("Error: could not open file %s\n", filename);
-        return 1; // Indicate failure
+        return 1;
     }
     
     char ch;
@@ -17,7 +17,7 @@ int printMap(char *filename)
         putchar(ch);
     }
     printf("\n");
-    
+
     fclose(fp);
-    return 0; // Indicate success
+    return 0;
 }
