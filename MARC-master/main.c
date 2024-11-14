@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include "map.h"
+#include "tripSelectionTree.c"
+
+/// move rover here
 
 int main() {
+    
+    t_tree tree = EmptyTree();
     t_map map = createMapFromFile("./maps/example1.map");
     printf("Map created with dimensions %d x %d\n", map.y_max, map.x_max);
     for (int i = 0; i < map.y_max; i++)
@@ -22,5 +27,6 @@ int main() {
         printf("\n");
     }
     displayMap(map);
+
     return 0;
 }
