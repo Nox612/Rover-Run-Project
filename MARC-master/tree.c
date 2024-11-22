@@ -1,22 +1,5 @@
 #include <stdlib.h>
-
-#pragma region structure
-
-typedef struct s_node
-{
-    int value;
-    struct s_node **childs;
-    struct s_node *parent;
-    int heigth;
-    int nbChildren;
-}t_node;
-
-typedef struct tree
-{
-    t_node *root;
-}t_tree;
-
-#pragma endregion structure
+#include "tree.h"
 
 /// create a node with a given value
 
@@ -110,3 +93,8 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
         parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
+
+// t_node* minimum
+
+// t_node* maximum
+
