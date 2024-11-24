@@ -53,7 +53,7 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
 }
 
 
-t_tree minimum(t_tree tree, t_node parent)
+t_tree Minimum(t_tree tree, t_node parent)
 {
     t_tree minTree;
 
@@ -76,4 +76,18 @@ t_tree minimum(t_tree tree, t_node parent)
     minTree = CreateTree(min);
 
     return minTree;
+}
+
+t_node** PathToMinimum(t_tree tree)
+{
+    int i = 0;
+    t_node **path = (t_node**)malloc(sizeof(t_node*) * tree.root->height);
+    t_node *curr = tree.root;
+    while (curr != NULL)
+    {
+        path[i] = Minimum(tree, *curr).root;
+        i++;
+    }
+    
+    return path;
 }
