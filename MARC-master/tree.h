@@ -7,7 +7,6 @@ typedef struct s_node
     int value;
     struct s_node **childs;
     struct s_node *parent;
-    int heigth;
     int nbChildren;
 }t_node;
 

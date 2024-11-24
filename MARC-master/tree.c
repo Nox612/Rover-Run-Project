@@ -11,7 +11,6 @@ t_node* CreateNode(int val)
     newNode->parent = NULL;
     newNode->childs = NULL;
     newNode->nbChildren = 0;
-    newNode->height = 0;
     return newNode;
 }
 
@@ -91,11 +90,12 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
     if(parentNode->nbChildren < 5) // check wether or not there is still space for another children
     {
         t_node *newNode = CreateNode(val);                                  // create the child
-        newNode->parent = parentNode;                                       // assign the parent
-        newNode->heigth = parentNode->heigth + 1;                           // assign the heigth to the child
+        newNode->parent = parentNode;                                       // assign the parent                    // assign the heigth to the child
         parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
+
+
 
 t_node **moveTree(t_tree tree)
 {
