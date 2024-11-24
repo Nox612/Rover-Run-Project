@@ -10,7 +10,7 @@ t_node* CreateNode(int val)
     newNode->parent = NULL;
     newNode->childs = NULL;
     newNode->nbChildren = 0;
-    newNode->heigth = NULL;
+    newNode->height = 0;
     return newNode;
 }
 
@@ -23,60 +23,16 @@ t_tree EmptyTree()
     return *newTree;
 }
 
-/// find a node by recursion
-
-t_node* FindNodeInTree(t_node *node, t_node *curr)
+t_tree CreateTree(t_node *root)
 {
-    if(node == NULL || curr == NULL)
-    {
-        return NULL;                                                // base case
-    }
-    if(node->value == curr->value)
-    {
-        return node;                                                // return the node if it is find
-    }
-    else
-    {
-        for(int i=0; i<=curr->nbChildren; i++)
-        {
-            return FindValueInTree(node, curr->childs[i]);          // go through all the childs
-        }
-    }
-}
-
-/// return a path as an array of integer representing the indexes of each childs
-
-int* FindPath(t_tree *pt, t_node *node)
-{
-    int arrayChild[2];
-    int j = 0;
-
-    t_node* curr;
-    t_node* child = node;                               // child of the current node
-
-    while (curr != pt->root)                             // go through all the node
-    {
-        curr = child->parent;
-        for(int i=0; i<curr->nbChildren; i++)            // go through all the childrens to find the maching one
-        {
-            if(curr->childs[i] = child)
-            {
-                arrayChild[j] = i;                      // add the index of the child
-            }
-        }
-        j++;
-    }
-
-    return arrayChild;
+    t_tree *newTree = (t_tree*)malloc(sizeof(t_tree));
+    newTree->root = root;
+    return *newTree;
 }
 
 /// insert a value inside a tree
-/**
- @warning obsolete, use minimum instead.
-*/
 void InsertValue(t_tree *pt, t_node *parent, int val)
 {
-    int pos;
 
     if (pt->root == NULL)                                                   // check if there is a root
     {
@@ -91,47 +47,33 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
     {
         t_node *newNode = CreateNode(val);                                  // create the child
         newNode->parent = parentNode;                                       // assign the parent
-        newNode->heigth = parentNode->heigth + 1;                           // assign the heigth to the child
+        newNode->height = parentNode->height + 1;                           // assign the height to the child
         parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
 
-/// find all leaf nodes in the tree and return them as an array
-t_node** minimum(t_tree *pt, int *numLeaves)
+
+t_tree minimum(t_tree tree, t_node parent)
 {
-    if (pt->root == NULL)
+    t_tree minTree;
+
+    if(parent.nbChildren == 0)
     {
-        *numLeaves = 0;
-        return NULL;
+        minTree = CreateTree(&parent);
+        return ;
     }
 
-    t_node **leaves = (t_node**)malloc(sizeof(t_node*) * 15); // assuming max 15 leaves
-    *numLeaves = 0;
-    findLeaves(pt->root, leaves, numLeaves);
-    return leaves;
-}
+    t_node *min = parent.childs[0];
 
-/// helper function to find all leaf nodes
-void findLeaves(t_node *node, t_node **leaves, int *numLeaves)
-{
-    if (node == NULL)
+    for(int i=0; i<=parent.nbChildren; i++)
     {
-        return;
-    }
-
-    if (node->nbChildren == 0)
-    {
-        leaves[*numLeaves] = node;
-        (*numLeaves)++;
-    }
-    else
-    {
-        for (int i = 0; i < node->nbChildren; i++)
+        if(min->value > parent.childs[i]->value)
         {
-            findLeaves(node->childs[i], leaves, numLeaves);
+            min = parent.childs[i];
         }
     }
+
+    minTree = CreateTree(min);
+
+    return minTree;
 }
-
-// t_node* maximum
-
