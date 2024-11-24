@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "moves.h"
 #include "tree.h"
 
 /// create a node with a given value
@@ -39,11 +40,7 @@ t_node* FindNodeInTree(t_node *node, t_node *curr)
     {
         for(int i=0; i<=curr->nbChildren; i++)
         {
-<<<<<<< HEAD
             return FindNodeInTree(node, curr->childs[i]);          // go through all the childs
-=======
-            return FindValueInTree(node, curr->childs[i]);          // go through all the childs
->>>>>>> origin/main
         }
     }
 }
@@ -80,11 +77,8 @@ int* FindPath(t_tree *pt, t_node *node)
 */
 void InsertValue(t_tree *pt, t_node *parent, int val)
 {
-<<<<<<< HEAD
-=======
     int pos;
 
->>>>>>> origin/main
     if (pt->root == NULL)                                                   // check if there is a root
     {
         pt->root = CreateNode(val);
@@ -93,65 +87,89 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
 
     t_node *curr;
     t_node *parentNode = FindNodeInTree(parent, curr);                      // find the parent
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> origin/main
     if(parentNode->nbChildren < 5) // check wether or not there is still space for another children
     {
         t_node *newNode = CreateNode(val);                                  // create the child
         newNode->parent = parentNode;                                       // assign the parent
-<<<<<<< HEAD
         newNode->height = parentNode->height + 1;                           // assign the heigth to the child
-=======
-        newNode->heigth = parentNode->heigth + 1;                           // assign the heigth to the child
->>>>>>> origin/main
         parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
 
-<<<<<<< HEAD
-=======
-/// find all leaf nodes in the tree and return them as an array
-t_node** minimum(t_tree *pt, int *numLeaves)
+t_node **moveTree(t_tree tree)
 {
-    if (pt->root == NULL)
-    {
-        *numLeaves = 0;
-        return NULL;
-    }
+    int nbPossibleMoves = 9;
+    t_move *possibleMoves = getRandomMoves(nbPossibleMoves);
+    tree.root->childs = (t_node*)malloc(nbPossibleMoves*sizeof(t_node));
+    tree.root->nbChildren = nbPossibleMoves;
 
-    t_node **leaves = (t_node**)malloc(sizeof(t_node*) * 15); // assuming max 15 leaves
-    *numLeaves = 0;
-    findLeaves(pt->root, leaves, numLeaves);
-    return leaves;
-}
-
->>>>>>> origin/main
-/// helper function to find all leaf nodes
-void findLeaves(t_node *node, t_node **leaves, int *numLeaves)
-{
-    if (node == NULL)
+    for (int i = 0; i < nbPossibleMoves; i = i + 1)
     {
-        return;
-    }
-
-    if (node->nbChildren == 0)
-    {
-        leaves[*numLeaves] = node;
-        (*numLeaves)++;
-    }
-    else
-    {
-        for (int i = 0; i < node->nbChildren; i++)
+        tree.root->childs[i]->value = possibleMoves[i];
+        tree.root->childs[i]->childs = (t_node*)malloc((nbPossibleMoves - 1)*sizeof(t_node));
+        tree.root->childs[i]->nbChildren = nbPossibleMoves - 1;
+        t_move *possibleMoves2 = (t_move*)malloc((nbPossibleMoves - 1)*sizeof(t_move));
+        for (int i2 = 0; i2 < nbPossibleMoves; i2 = i2 + 1)
         {
-            findLeaves(node->childs[i], leaves, numLeaves);
+            if (i2 != i)
+            {
+                possibleMoves2[i2] = possibleMoves[i2];
+            }
+        }
+
+        for (int j = 0; j < nbPossibleMoves - 1; j = j + 1)
+        {
+            tree.root->childs[i]->childs[j]->value = possibleMoves2[j];
+            tree.root->childs[i]->childs[j]->childs = (t_node*)malloc((nbPossibleMoves - 2)*sizeof(t_node));
+            tree.root->childs[i]->childs[j]->nbChildren = nbPossibleMoves - 2;
+            t_move *possibleMoves3 = (t_move*)malloc((nbPossibleMoves - 1)*sizeof(t_move));
+            for (int j2 = 0; j2 < nbPossibleMoves - 1; j2 = j2 + 1)
+            {
+                if (j2 != j)
+                {
+                    possibleMoves3[j2] = possibleMoves2[j2];
+                }
+            }
+
+            for (int k = 0; k < nbPossibleMoves - 2; k = k + 1)
+            {
+                tree.root->childs[i]->childs[j]->childs[k]->value = possibleMoves3[k];
+                tree.root->childs[i]->childs[j]->childs[k]->childs = (t_node*)malloc((nbPossibleMoves - 3)*sizeof(t_node));
+                tree.root->childs[i]->childs[j]->childs[k]->nbChildren = nbPossibleMoves - 3;
+                t_move *possibleMoves4 = (t_move*)malloc((nbPossibleMoves - 2)*sizeof(t_move));
+                for (int k2 = 0; k2 < nbPossibleMoves - 2; k2 = k2 + 1)
+                {
+                    if (k2 != k)
+                    {
+                        possibleMoves4[k2] = possibleMoves3[k2];
+                    }
+                }
+
+                for (int l = 0; l < nbPossibleMoves - 3; l = l + 1)
+                {
+                    tree.root->childs[i]->childs[j]->childs[k]->childs[l]->value = possibleMoves4[l];
+                    tree.root->childs[i]->childs[j]->childs[k]->childs[l]->childs = (t_node*)malloc((nbPossibleMoves - 4)*sizeof(t_node));
+                    tree.root->childs[i]->childs[j]->childs[k]->childs[l]->nbChildren = nbPossibleMoves - 4;
+                    t_move *possibleMoves5 = (t_move*)malloc((nbPossibleMoves - 3)*sizeof(t_move));
+                    for (int l2 = 0; l2 < nbPossibleMoves - 3; l2 = l2 + 1)
+                    {
+                        if (l2 != l)
+                        {
+                            possibleMoves5[l2] = possibleMoves4[l2];
+                        }
+                    }
+
+                    for (int m = 0; m < nbPossibleMoves - 4; m = m + 1)
+                    {
+                        tree.root->childs[i]->childs[j]->childs[k]->childs[l]->childs[m]->value = possibleMoves5[m];
+                    }
+                }
+            }
         }
     }
 }
 
-<<<<<<< HEAD
 /// find all leaf nodes in the tree and return them as an array
 t_node** minimum(t_tree *pt, int *numLeaves)
 {
@@ -163,12 +181,7 @@ t_node** minimum(t_tree *pt, int *numLeaves)
 
     t_node **leaves = (t_node**)malloc(sizeof(t_node*) * 15); // assuming max 15 leaves
     *numLeaves = 0;
-    findLeaves(pt->root, leaves, numLeaves);
     return leaves;
 }
 
 // t_node* maximum
-=======
-// t_node* maximum
-
->>>>>>> origin/main
