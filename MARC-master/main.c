@@ -27,6 +27,5 @@ int main() {
         printf("\n");
     }
     displayMap(map);
-
     return 0;
 }

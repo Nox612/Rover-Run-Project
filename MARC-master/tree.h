@@ -28,4 +28,7 @@ void InsertValue(t_tree *pt, t_node *parent, int val);
 
 #pragma endregion
 
+<<<<<<< HEAD
 #endif //_TREE_H_
+=======
+>>>>>>> origin/main
