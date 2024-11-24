@@ -71,7 +71,9 @@ int* FindPath(t_tree *pt, t_node *node)
 }
 
 /// insert a value inside a tree
-
+/**
+ @warning obsolete, use minimum instead.
+*/
 void InsertValue(t_tree *pt, t_node *parent, int val)
 {
     int pos;
@@ -94,7 +96,42 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
     }
 }
 
-// t_node* minimum
+/// find all leaf nodes in the tree and return them as an array
+t_node** minimum(t_tree *pt, int *numLeaves)
+{
+    if (pt->root == NULL)
+    {
+        *numLeaves = 0;
+        return NULL;
+    }
+
+    t_node **leaves = (t_node**)malloc(sizeof(t_node*) * 15); // assuming max 15 leaves
+    *numLeaves = 0;
+    findLeaves(pt->root, leaves, numLeaves);
+    return leaves;
+}
+
+/// helper function to find all leaf nodes
+void findLeaves(t_node *node, t_node **leaves, int *numLeaves)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    if (node->nbChildren == 0)
+    {
+        leaves[*numLeaves] = node;
+        (*numLeaves)++;
+    }
+    else
+    {
+        for (int i = 0; i < node->nbChildren; i++)
+        {
+            findLeaves(node->childs[i], leaves, numLeaves);
+        }
+    }
+}
 
 // t_node* maximum
 
