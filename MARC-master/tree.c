@@ -52,20 +52,26 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
     }
 }
 
+/**
+ * @brief Find the minimum node in a tree
+ * @param tree the tree to search in
+ * @param parent the parent node of the tree
+ * @return the minimum node as a tree structure
+ */
 
 t_tree Minimum(t_tree tree, t_node parent)
 {
     t_tree minTree;
 
-    if(parent.nbChildren == 0)
+    if(parent.nbChildren == 0) // check if the parent has children
     {
         minTree = CreateTree(&parent);
-        return ;
+        return minTree;
     }
 
     t_node *min = parent.childs[0];
 
-    for(int i=0; i<=parent.nbChildren; i++)
+    for(int i=1; i<parent.nbChildren; i++)
     {
         if(min->value > parent.childs[i]->value)
         {
@@ -78,14 +84,21 @@ t_tree Minimum(t_tree tree, t_node parent)
     return minTree;
 }
 
+/**
+ * @brief Find the path to the minimum node in a tree
+ * @param tree the tree to search in
+ * @return the path to the minimum node in the tree as an array of nodes
+ */
+
 t_node** PathToMinimum(t_tree tree)
 {
     int i = 0;
-    t_node **path = (t_node**)malloc(sizeof(t_node*) * tree.root->height);
+    t_node **path = (t_node**)malloc(sizeof(t_node*) * 16);
     t_node *curr = tree.root;
-    while (curr != NULL)
+    while (curr != NULL) // loop through the tree to find the minimum node and store it in the path
     {
         path[i] = Minimum(tree, *curr).root;
+        curr = path[i];
         i++;
     }
     
