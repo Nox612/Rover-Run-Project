@@ -1,4 +1,4 @@
-n#ifndef _TREE_H_
+#ifndef _TREE_H_
 
 #pragma region structure
 
@@ -7,7 +7,7 @@ typedef struct s_node
     int value;
     struct s_node **childs;
     struct s_node *parent;
-    int height;
+    int heigth;
     int nbChildren;
 }t_node;
 

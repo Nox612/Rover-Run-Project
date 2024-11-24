@@ -40,7 +40,7 @@ t_node* FindNodeInTree(t_node *node, t_node *curr)
     {
         for(int i=0; i<=curr->nbChildren; i++)
         {
-            return FindNodeInTree(node, curr->childs[i]);          // go through all the childs
+            return FindValueInTree(node, curr->childs[i]);          // go through all the childs
         }
     }
 }
@@ -87,12 +87,12 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
 
     t_node *curr;
     t_node *parentNode = FindNodeInTree(parent, curr);                      // find the parent
-
+    
     if(parentNode->nbChildren < 5) // check wether or not there is still space for another children
     {
         t_node *newNode = CreateNode(val);                                  // create the child
         newNode->parent = parentNode;                                       // assign the parent
-        newNode->height = parentNode->height + 1;                           // assign the heigth to the child
+        newNode->heigth = parentNode->heigth + 1;                           // assign the heigth to the child
         parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
@@ -181,7 +181,31 @@ t_node** minimum(t_tree *pt, int *numLeaves)
 
     t_node **leaves = (t_node**)malloc(sizeof(t_node*) * 15); // assuming max 15 leaves
     *numLeaves = 0;
+    findLeaves(pt->root, leaves, numLeaves);
     return leaves;
 }
 
+/// helper function to find all leaf nodes
+void findLeaves(t_node *node, t_node **leaves, int *numLeaves)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    if (node->nbChildren == 0)
+    {
+        leaves[*numLeaves] = node;
+        (*numLeaves)++;
+    }
+    else
+    {
+        for (int i = 0; i < node->nbChildren; i++)
+        {
+            findLeaves(node->childs[i], leaves, numLeaves);
+        }
+    }
+}
+
 // t_node* maximum
+
