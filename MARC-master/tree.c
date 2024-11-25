@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "moves.h"
 #include "tree.h"
 
 /// create a node with a given value
@@ -8,7 +9,7 @@ t_node* CreateNode(int val)
     t_node *newNode = (t_node*)malloc(sizeof(t_node));
     newNode->value = val;
     newNode->parent = NULL;
-    newNode->childs = NULL;
+    newNode->children = NULL;
     newNode->nbChildren = 0;
     return newNode;
 }
@@ -22,16 +23,60 @@ t_tree EmptyTree()
     return *newTree;
 }
 
-t_tree CreateTree(t_node *root)
+/// find a node by recursion
+
+t_node* FindNodeInTree(t_node *node, t_node *curr)
 {
-    t_tree *newTree = (t_tree*)malloc(sizeof(t_tree));
-    newTree->root = root;
-    return *newTree;
+    if(node == NULL || curr == NULL)
+    {
+        return NULL;                                                // base case
+    }
+    if(node->value == curr->value)
+    {
+        return node;                                                // return the node if it is find
+    }
+    else
+    {
+        for(int i=0; i<=curr->nbChildren; i++)
+        {
+            return FindNodeInTree(node, curr->children[i]);          // go through all the children
+        }
+    }
+}
+
+/// return a path as an array of integer representing the indexes of each children
+
+int* FindPath(t_tree *pt, t_node *node)
+{
+    int arrayChild[2];
+    int j = 0;
+
+    t_node* curr;
+    t_node* child = node;                               // child of the current node
+
+    while (curr != pt->root)                             // go through all the node
+    {
+        curr = child->parent;
+        for(int i=0; i<curr->nbChildren; i++)            // go through all the childrens to find the maching one
+        {
+            if(curr->children[i] = child)
+            {
+                arrayChild[j] = i;                      // add the index of the child
+            }
+        }
+        j++;
+    }
+
+    return arrayChild;
 }
 
 /// insert a value inside a tree
+/**
+ @warning obsolete, use minimum instead.
+*/
 void InsertValue(t_tree *pt, t_node *parent, int val)
 {
+    int pos;
 
     if (pt->root == NULL)                                                   // check if there is a root
     {
@@ -45,60 +90,122 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
     if(parentNode->nbChildren < 5) // check wether or not there is still space for another children
     {
         t_node *newNode = CreateNode(val);                                  // create the child
-        newNode->parent = parentNode;                                       // assign the parent
-        parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
+        newNode->parent = parentNode;                                       // assign the parent                    
+        parentNode->children[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
 
-/**
- * @brief Find the minimum node in a tree
- * @param tree the tree to search in
- * @param parent the parent node of the tree
- * @return the minimum node as a tree structure
- */
 
-t_tree Minimum(t_tree tree, t_node parent)
+
+t_node **moveTree(t_tree tree)
 {
-    t_tree minTree;
+    int nbPossibleMoves = 9;
+    t_move *possibleMoves = getRandomMoves(nbPossibleMoves);
+    tree.root->children = (t_node*)malloc(nbPossibleMoves*sizeof(t_node));
+    tree.root->nbChildren = nbPossibleMoves;
 
-    if(parent.nbChildren == 0) // check if the parent has children
+    for (int i = 0; i < nbPossibleMoves; i = i + 1)
     {
-        minTree = CreateTree(&parent);
-        return minTree;
-    }
-
-    t_node *min = parent.childs[0];
-
-    for(int i=1; i<parent.nbChildren; i++)
-    {
-        if(min->value > parent.childs[i]->value)
+        tree.root->children[i]->value = possibleMoves[i];
+        tree.root->children[i]->children = (t_node*)malloc((nbPossibleMoves - 1)*sizeof(t_node));
+        tree.root->children[i]->nbChildren = nbPossibleMoves - 1;
+        t_move *possibleMoves2 = (t_move*)malloc((nbPossibleMoves - 1)*sizeof(t_move));
+        for (int i2 = 0; i2 < nbPossibleMoves; i2 = i2 + 1)
         {
-            min = parent.childs[i];
+            if (i2 != i)
+            {
+                possibleMoves2[i2] = possibleMoves[i2];
+            }
+        }
+
+        for (int j = 0; j < nbPossibleMoves - 1; j = j + 1)
+        {
+            tree.root->children[i]->children[j]->value = possibleMoves2[j];
+            tree.root->children[i]->children[j]->children = (t_node*)malloc((nbPossibleMoves - 2)*sizeof(t_node));
+            tree.root->children[i]->children[j]->nbChildren = nbPossibleMoves - 2;
+            t_move *possibleMoves3 = (t_move*)malloc((nbPossibleMoves - 1)*sizeof(t_move));
+            for (int j2 = 0; j2 < nbPossibleMoves - 1; j2 = j2 + 1)
+            {
+                if (j2 != j)
+                {
+                    possibleMoves3[j2] = possibleMoves2[j2];
+                }
+            }
+
+            for (int k = 0; k < nbPossibleMoves - 2; k = k + 1)
+            {
+                tree.root->children[i]->children[j]->children[k]->value = possibleMoves3[k];
+                tree.root->children[i]->children[j]->children[k]->children = (t_node*)malloc((nbPossibleMoves - 3)*sizeof(t_node));
+                tree.root->children[i]->children[j]->children[k]->nbChildren = nbPossibleMoves - 3;
+                t_move *possibleMoves4 = (t_move*)malloc((nbPossibleMoves - 2)*sizeof(t_move));
+                for (int k2 = 0; k2 < nbPossibleMoves - 2; k2 = k2 + 1)
+                {
+                    if (k2 != k)
+                    {
+                        possibleMoves4[k2] = possibleMoves3[k2];
+                    }
+                }
+
+                for (int l = 0; l < nbPossibleMoves - 3; l = l + 1)
+                {
+                    tree.root->children[i]->children[j]->children[k]->children[l]->value = possibleMoves4[l];
+                    tree.root->children[i]->children[j]->children[k]->children[l]->children = (t_node*)malloc((nbPossibleMoves - 4)*sizeof(t_node));
+                    tree.root->children[i]->children[j]->children[k]->children[l]->nbChildren = nbPossibleMoves - 4;
+                    t_move *possibleMoves5 = (t_move*)malloc((nbPossibleMoves - 3)*sizeof(t_move));
+                    for (int l2 = 0; l2 < nbPossibleMoves - 3; l2 = l2 + 1)
+                    {
+                        if (l2 != l)
+                        {
+                            possibleMoves5[l2] = possibleMoves4[l2];
+                        }
+                    }
+
+                    for (int m = 0; m < nbPossibleMoves - 4; m = m + 1)
+                    {
+                        tree.root->children[i]->children[j]->children[k]->children[l]->children[m]->value = possibleMoves5[m];
+                    }
+                }
+            }
         }
     }
-
-    minTree = CreateTree(min);
-
-    return minTree;
 }
 
-/**
- * @brief Find the path to the minimum node in a tree
- * @param tree the tree to search in
- * @return the path to the minimum node in the tree as an array of nodes
- */
-
-t_node** PathToMinimum(t_tree tree)
+/// find all leaf nodes in the tree and return them as an array
+t_node** minimum(t_tree *pt, int *numLeaves)
 {
-    int i = 0;
-    t_node **path = (t_node**)malloc(sizeof(t_node*) * 16);
-    t_node *curr = tree.root;
-    while (curr != NULL) // loop through the tree to find the minimum node and store it in the path
+    if (pt->root == NULL)
     {
-        path[i] = Minimum(tree, *curr).root;
-        curr = path[i];
-        i++;
+        *numLeaves = 0;
+        return NULL;
     }
-    
-    return path;
+
+    t_node **leaves = (t_node**)malloc(sizeof(t_node*) * 15); // assuming max 15 leaves
+    *numLeaves = 0;
+    findLeaves(pt->root, leaves, numLeaves);
+    return leaves;
 }
+
+/// helper function to find all leaf nodes
+void findLeaves(t_node *node, t_node **leaves, int *numLeaves)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    if (node->nbChildren == 0)
+    {
+        leaves[*numLeaves] = node;
+        (*numLeaves)++;
+    }
+    else
+    {
+        for (int i = 0; i < node->nbChildren; i++)
+        {
+            findLeaves(node->children[i], leaves, numLeaves);
+        }
+    }
+}
+
+// t_node* maximum
+
