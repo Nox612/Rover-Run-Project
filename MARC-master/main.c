@@ -11,6 +11,7 @@
 
 /// move rover here
 
+
 int main() {    
     srand(time(NULL));
     t_map map = createMapFromFile("./maps/example1.map");
@@ -32,6 +33,7 @@ int main() {
         printf("The robot is in a crevasse, it can't move\n");
         return 0;
     }
+
     int maxLayer = 5;
     if (map.soils[loc.pos.y][loc.pos.x] == REG)
     {

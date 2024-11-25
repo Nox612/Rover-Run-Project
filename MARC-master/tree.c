@@ -170,7 +170,6 @@ t_node **moveTree(t_tree tree)
     }
 }
 
-
 /// find all leaf nodes in the tree and return them as an array
 t_node** minimum(t_tree *pt, int *numLeaves)
 {
