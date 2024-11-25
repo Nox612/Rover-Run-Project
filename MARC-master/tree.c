@@ -39,7 +39,7 @@ t_node* FindNodeInTree(t_node *node, t_node *curr)
     {
         for(int i=0; i<=curr->nbChildren; i++)
         {
-            return FindValueInTree(node, curr->children[i]);          // go through all the children
+            return FindNodeInTree(node, curr->children[i]);          // go through all the children
         }
     }
 }
