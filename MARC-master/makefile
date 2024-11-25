@@ -1,4 +1,4 @@
-FLAGS = -Wall
+FLAGS = -w
 INCLUDES = CreatePathTree.c map.c tree.c stack.c queue.c moves.c loc.c
 COMPILER = gcc
 
