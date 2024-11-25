@@ -9,7 +9,7 @@ t_node* CreateNode(int val)
     t_node *newNode = (t_node*)malloc(sizeof(t_node));
     newNode->value = val;
     newNode->parent = NULL;
-    newNode->childs = NULL;
+    newNode->children = NULL;
     newNode->nbChildren = 0;
     return newNode;
 }
@@ -39,12 +39,12 @@ t_node* FindNodeInTree(t_node *node, t_node *curr)
     {
         for(int i=0; i<=curr->nbChildren; i++)
         {
-            return FindValueInTree(node, curr->childs[i]);          // go through all the childs
+            return FindNodeInTree(node, curr->children[i]);          // go through all the children
         }
     }
 }
 
-/// return a path as an array of integer representing the indexes of each childs
+/// return a path as an array of integer representing the indexes of each children
 
 int* FindPath(t_tree *pt, t_node *node)
 {
@@ -59,7 +59,7 @@ int* FindPath(t_tree *pt, t_node *node)
         curr = child->parent;
         for(int i=0; i<curr->nbChildren; i++)            // go through all the childrens to find the maching one
         {
-            if(curr->childs[i] = child)
+            if(curr->children[i] = child)
             {
                 arrayChild[j] = i;                      // add the index of the child
             }
@@ -91,7 +91,7 @@ void InsertValue(t_tree *pt, t_node *parent, int val)
     {
         t_node *newNode = CreateNode(val);                                  // create the child
         newNode->parent = parentNode;                                       // assign the parent                    // assign the heigth to the child
-        parentNode->childs[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
+        parentNode->children[parentNode->nbChildren + 1] = newNode;           // assign the child to the parent
     }
 }
 
@@ -101,14 +101,14 @@ t_node **moveTree(t_tree tree)
 {
     int nbPossibleMoves = 9;
     t_move *possibleMoves = getRandomMoves(nbPossibleMoves);
-    tree.root->childs = (t_node*)malloc(nbPossibleMoves*sizeof(t_node));
+    tree.root->children = (t_node*)malloc(nbPossibleMoves*sizeof(t_node));
     tree.root->nbChildren = nbPossibleMoves;
 
     for (int i = 0; i < nbPossibleMoves; i = i + 1)
     {
-        tree.root->childs[i]->value = possibleMoves[i];
-        tree.root->childs[i]->childs = (t_node*)malloc((nbPossibleMoves - 1)*sizeof(t_node));
-        tree.root->childs[i]->nbChildren = nbPossibleMoves - 1;
+        tree.root->children[i]->value = possibleMoves[i];
+        tree.root->children[i]->children = (t_node*)malloc((nbPossibleMoves - 1)*sizeof(t_node));
+        tree.root->children[i]->nbChildren = nbPossibleMoves - 1;
         t_move *possibleMoves2 = (t_move*)malloc((nbPossibleMoves - 1)*sizeof(t_move));
         for (int i2 = 0; i2 < nbPossibleMoves; i2 = i2 + 1)
         {
@@ -120,9 +120,9 @@ t_node **moveTree(t_tree tree)
 
         for (int j = 0; j < nbPossibleMoves - 1; j = j + 1)
         {
-            tree.root->childs[i]->childs[j]->value = possibleMoves2[j];
-            tree.root->childs[i]->childs[j]->childs = (t_node*)malloc((nbPossibleMoves - 2)*sizeof(t_node));
-            tree.root->childs[i]->childs[j]->nbChildren = nbPossibleMoves - 2;
+            tree.root->children[i]->children[j]->value = possibleMoves2[j];
+            tree.root->children[i]->children[j]->children = (t_node*)malloc((nbPossibleMoves - 2)*sizeof(t_node));
+            tree.root->children[i]->children[j]->nbChildren = nbPossibleMoves - 2;
             t_move *possibleMoves3 = (t_move*)malloc((nbPossibleMoves - 1)*sizeof(t_move));
             for (int j2 = 0; j2 < nbPossibleMoves - 1; j2 = j2 + 1)
             {
@@ -134,9 +134,9 @@ t_node **moveTree(t_tree tree)
 
             for (int k = 0; k < nbPossibleMoves - 2; k = k + 1)
             {
-                tree.root->childs[i]->childs[j]->childs[k]->value = possibleMoves3[k];
-                tree.root->childs[i]->childs[j]->childs[k]->childs = (t_node*)malloc((nbPossibleMoves - 3)*sizeof(t_node));
-                tree.root->childs[i]->childs[j]->childs[k]->nbChildren = nbPossibleMoves - 3;
+                tree.root->children[i]->children[j]->children[k]->value = possibleMoves3[k];
+                tree.root->children[i]->children[j]->children[k]->children = (t_node*)malloc((nbPossibleMoves - 3)*sizeof(t_node));
+                tree.root->children[i]->children[j]->children[k]->nbChildren = nbPossibleMoves - 3;
                 t_move *possibleMoves4 = (t_move*)malloc((nbPossibleMoves - 2)*sizeof(t_move));
                 for (int k2 = 0; k2 < nbPossibleMoves - 2; k2 = k2 + 1)
                 {
@@ -148,9 +148,9 @@ t_node **moveTree(t_tree tree)
 
                 for (int l = 0; l < nbPossibleMoves - 3; l = l + 1)
                 {
-                    tree.root->childs[i]->childs[j]->childs[k]->childs[l]->value = possibleMoves4[l];
-                    tree.root->childs[i]->childs[j]->childs[k]->childs[l]->childs = (t_node*)malloc((nbPossibleMoves - 4)*sizeof(t_node));
-                    tree.root->childs[i]->childs[j]->childs[k]->childs[l]->nbChildren = nbPossibleMoves - 4;
+                    tree.root->children[i]->children[j]->children[k]->children[l]->value = possibleMoves4[l];
+                    tree.root->children[i]->children[j]->children[k]->children[l]->children = (t_node*)malloc((nbPossibleMoves - 4)*sizeof(t_node));
+                    tree.root->children[i]->children[j]->children[k]->children[l]->nbChildren = nbPossibleMoves - 4;
                     t_move *possibleMoves5 = (t_move*)malloc((nbPossibleMoves - 3)*sizeof(t_move));
                     for (int l2 = 0; l2 < nbPossibleMoves - 3; l2 = l2 + 1)
                     {
@@ -162,7 +162,7 @@ t_node **moveTree(t_tree tree)
 
                     for (int m = 0; m < nbPossibleMoves - 4; m = m + 1)
                     {
-                        tree.root->childs[i]->childs[j]->childs[k]->childs[l]->childs[m]->value = possibleMoves5[m];
+                        tree.root->children[i]->children[j]->children[k]->children[l]->children[m]->value = possibleMoves5[m];
                     }
                 }
             }
@@ -202,7 +202,7 @@ void findLeaves(t_node *node, t_node **leaves, int *numLeaves)
     {
         for (int i = 0; i < node->nbChildren; i++)
         {
-            findLeaves(node->childs[i], leaves, numLeaves);
+            findLeaves(node->children[i], leaves, numLeaves);
         }
     }
 }
